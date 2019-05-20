@@ -78,7 +78,7 @@ class ViewController: UIViewController {
         if timer == nil {
             setupTimer()
         }
-        UIView.animate(withDuration: 0.2, delay: 0.1, options: .transitionCrossDissolve, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0.1, usingSpringWithDamping: 0.2, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.changePosition()
         }) { (isFinished) in
             
@@ -98,7 +98,7 @@ class ViewController: UIViewController {
         let randomX = Int.random(in: 1...300)
         let randomY = Int.random(in: 1...500)
         
-        objectMe.frame = CGRect(x: CGFloat(randomX), y: CGFloat(randomY), width: 135, height: 130.0)
+        objectMe.frame = CGRect(x: CGFloat(randomX), y: CGFloat(randomY), width: 145, height: 150.0)
         
     }
 
