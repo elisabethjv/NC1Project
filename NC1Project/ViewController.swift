@@ -55,6 +55,11 @@ class ViewController: UIViewController {
     }
     // ini function progress bar nya
     @objc func handlingPgBar() {
+     
+        // ini CARA UNTUK MEMBESARKAN PROGRESS BAR NYA
+        pgBar.transform = CGAffineTransform(scaleX: 1, y: 8)
+        
+        
         if pgBar.progress == 1 {
             timer?.invalidate()
             
@@ -84,7 +89,7 @@ class ViewController: UIViewController {
             
         }
         
-        // ini untuk tambahin UIView lain ketika si object di klik
+        // ini untuk tambahin si benda lain (bloodcell) ketika si object (mikroba) di klik
         let rand = Float.random(in: 1...10)
         let asw = Float(objectMe.frame.minX)
         _ = rand + asw
@@ -93,7 +98,7 @@ class ViewController: UIViewController {
         self.safeAreaView.addSubview(asd)
     }
     
-    // ini objectMe posisi nya pindah kemana
+    // ini objectMe(mikroba) posisi nya pindah kemana
     func changePosition(){
         let randomX = Int.random(in: 1...300)
         let randomY = Int.random(in: 1...500)
