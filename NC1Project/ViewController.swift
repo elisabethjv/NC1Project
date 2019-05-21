@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var pgBar: UIProgressView!
     @IBOutlet weak var objectMe: UIImageView!
     @IBOutlet weak var safeAreaView: UIView!
+    @IBOutlet weak var catchMeLabel: UILabel!
     
     //buat back
     @IBAction func back(_ sender: UIStoryboardSegue) {
@@ -28,6 +29,10 @@ class ViewController: UIViewController {
         view.addSubview(objectMe)
         view.addSubview(safeAreaView)
         view.addSubview(pgBar)
+        
+        // manggil lagi timer nya
+        setupTimer()
+        
     }
     
     var timer: Timer?
@@ -46,18 +51,23 @@ class ViewController: UIViewController {
         // recognize tap
         let tapGesture = UITapGestureRecognizer (target: self , action: #selector(moveAnimation))
         objectMe.addGestureRecognizer(tapGesture)
+        
+        // manggil timer untuk mulai
+        if timer == nil {
+            setupTimer()
+        }
     
     }
     // ini untuk setup timer
     func setupTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(handlingPgBar), userInfo: nil, repeats: true)
+        timer?.fire()
     }
     // ini function progress bar nya
     @objc func handlingPgBar() {
      
         // ini CARA UNTUK MEMBESARKAN PROGRESS BAR NYA
         pgBar.transform = CGAffineTransform(scaleX: 1, y: 8)
-        
         
         if pgBar.progress == 1 {
             timer?.invalidate()
@@ -70,6 +80,7 @@ class ViewController: UIViewController {
     
     //trigger touch dimanapun saat timernya abis
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      
         //ketika progress sudah penuh
         if pgBar.progress == 1{
             performSegue(withIdentifier: "GameOver", sender: self)
@@ -78,10 +89,7 @@ class ViewController: UIViewController {
     
 // ini animation ketika di klik
     @objc func moveAnimation() {
-        // ini manggil si timer
-        if timer == nil {
-            setupTimer()
-        }
+    
         UIView.animate(withDuration: 0.2, delay: 0.1, usingSpringWithDamping: 0.2, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.changePosition()
         }) { (isFinished) in
