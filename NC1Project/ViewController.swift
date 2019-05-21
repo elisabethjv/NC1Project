@@ -46,7 +46,6 @@ class ViewController: UIViewController {
         // recognize tap
         let tapGesture = UITapGestureRecognizer (target: self , action: #selector(moveAnimation))
         objectMe.addGestureRecognizer(tapGesture)
-        
     
     }
     // ini untuk setup timer
