@@ -13,9 +13,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var pgBar: UIProgressView!
     @IBOutlet weak var objectMe: UIImageView!
     @IBOutlet weak var safeAreaView: UIView!
-    @IBOutlet weak var catchMeLabel: UILabel!
     
-    //buat back
+    @IBOutlet weak var bomb: UIImageView!
+    @IBOutlet weak var explode: UIImageView!
+    @IBOutlet weak var command: UIImageView!
+    
+    
+    
+    //buat replay game nya
     @IBAction func back(_ sender: UIStoryboardSegue) {
         timer?.invalidate()
         timer = nil
@@ -29,6 +34,9 @@ class ViewController: UIViewController {
         view.addSubview(objectMe)
         view.addSubview(safeAreaView)
         view.addSubview(pgBar)
+        view.addSubview(bomb)
+        view.addSubview(explode)
+        view.addSubview(command)
         
         // manggil lagi timer nya
         setupTimer()
@@ -56,41 +64,69 @@ class ViewController: UIViewController {
         if timer == nil {
             setupTimer()
         }
+        
+        // gimana supaya ketika mulai tap, instruksinya hilang:(
+       /*  if tapGesture.shouldReceiveTouch =  {
+            self.command.alpha = 1
+            
+        } else {
+           self.command.alpha = 0
+        } */
+        
+        // ini kasih instruksi di awal pas buka apps nya
+       if pgBar.progress == Float(0.1) {
+           self.command.alpha = 1
+       }
     
     }
+    
+    
     // ini untuk setup timer
     func setupTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(handlingPgBar), userInfo: nil, repeats: true)
         timer?.fire()
     }
-    // ini function progress bar nya
+    
+    
+    // ini function progress bar nya / TIMER
     @objc func handlingPgBar() {
      
-        // ini CARA UNTUK MEMBESARKAN PROGRESS BAR NYA
-        pgBar.transform = CGAffineTransform(scaleX: 1, y: 8)
-        
         if pgBar.progress == 1 {
             timer?.invalidate()
+            self.bomb.alpha = 0
+            self.explode.alpha = 1
+            self.command.alpha = 0
+            
+            // ini untuk perform segue yg otomatis setelah timernya full
+            self.performSegue(withIdentifier: "GameOver", sender: self)
             
         } else {
             pgBar.progress += 0.1
+            self.bomb.alpha = 1
+            self.explode.alpha = 0
+            self.command.alpha = 0
+    
         }
+        
+        // ini CARA UNTUK MEMBESARKAN PROGRESS BAR NYA
+        pgBar.transform = CGAffineTransform(scaleX: 1, y: 8)
         
     }
     
+    /* INI DIPAKAI KALO MAU PAKE TOUCH DULU SEBELUM PINDAH KE LAYAR GAME OVER
     //trigger touch dimanapun saat timernya abis
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
       
         //ketika progress sudah penuh
-        if pgBar.progress == 1{
-            performSegue(withIdentifier: "GameOver", sender: self)
+      if pgBar.progress == 1{
+          performSegue(withIdentifier: "GameOver", sender: self)
         }
-    }
+    } */
     
-// ini animation ketika di klik
+    // ini animation ketika di klik objectnya
     @objc func moveAnimation() {
     
-        UIView.animate(withDuration: 0.2, delay: 0.1, usingSpringWithDamping: 0.2, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.changePosition()
         }) { (isFinished) in
             
@@ -100,7 +136,7 @@ class ViewController: UIViewController {
         let rand = Float.random(in: 1...10)
         let asw = Float(objectMe.frame.minX)
         _ = rand + asw
-        let asd: UIImageView = UIImageView(frame: CGRect(x: CGFloat(asw), y: objectMe.layer.position.y, width: 130, height: 130))
+        let asd: UIImageView = UIImageView(frame: CGRect(x: CGFloat(asw), y: objectMe.layer.position.y, width: 135, height: 135))
         asd.image = UIImage(named: "bloodcell")
         self.safeAreaView.addSubview(asd)
     }
